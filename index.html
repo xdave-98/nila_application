@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For My Cat - Nilany</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .cursive { font-family: 'Dancing Script', cursive; }
+
+    /* ===== FLOATING HEARTS ===== */
+    .hearts-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      font-size: 20px;
+      animation: floatHeart linear infinite;
+      opacity: 0.15;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.15; }
+      50% { opacity: 0.3; }
+      100% { transform: translateY(-110vh) rotate(360deg) scale(0.5); opacity: 0; }
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: radial-gradient(ellipse at center, #1a0000 0%, #0a0a0a 70%);
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      color: #fff;
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeInDown 1.2s ease forwards 0.3s;
+    }
+    .hero h1 span { color: #e63946; }
+    .hero .subtitle {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: #e63946;
+      opacity: 0;
+      animation: fadeInDown 1.2s ease forwards 0.8s;
+    }
+    .hero .cat-emoji {
+      font-size: 4rem;
+      display: inline-block;
+      animation: bounce 2s ease infinite;
+      opacity: 0;
+      animation: bounce 2s ease infinite, fadeIn 1s ease forwards 1.3s;
+    }
+    .hero .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      animation: pulse 2s ease infinite;
+    }
+    .hero .scroll-hint span {
+      display: block;
+      font-size: 1.5rem;
+      animation: scrollBounce 1.5s ease infinite;
+    }
+
+    /* ===== MESSAGE SECTION ===== */
+    .message-section {
+      background: linear-gradient(180deg, #0a0a0a 0%, #120000 50%, #0a0a0a 100%);
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .message-card {
+      max-width: 700px;
+      background: rgba(230, 57, 70, 0.08);
+      border: 1px solid rgba(230, 57, 70, 0.2);
+      border-radius: 20px;
+      padding: 50px 40px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .message-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(230,57,70,0.05) 0%, transparent 70%);
+      animation: rotateGlow 10s linear infinite;
+    }
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .message-card h2 {
+      font-size: 2rem;
+      color: #e63946;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .message-card p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.85);
+      position: relative;
+    }
+    .message-card .highlight {
+      color: #e63946;
+      font-weight: 600;
+    }
+
+    /* ===== GALLERY SECTION ===== */
+    .gallery-section {
+      background: #0a0a0a;
+      padding: 80px 20px;
+    }
+    .gallery-section h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: #e63946;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .gallery-card {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #111;
+      border: 1px solid rgba(230,57,70,0.15);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: default;
+    }
+    .gallery-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(230, 57, 70, 0.2);
+    }
+    .gallery-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-card:hover img {
+      transform: scale(1.08);
+    }
+    .gallery-card .card-content {
+      padding: 20px;
+    }
+    .gallery-card h3 {
+      font-size: 1.2rem;
+      color: #e63946;
+      margin-bottom: 8px;
+    }
+    .gallery-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    /* ===== FLOWERS SECTION ===== */
+    .flowers-section {
+      background: linear-gradient(180deg, #0a0a0a 0%, #0d0000 50%, #0a0a0a 100%);
+      text-align: center;
+      min-height: 70vh;
+    }
+    .flowers-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .flowers-section .sub {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+    .flowers-gif {
+      max-width: 350px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(230, 57, 70, 0.15);
+    }
+
+    /* ===== CLOSING SECTION ===== */
+    .closing-section {
+      background: radial-gradient(ellipse at center, #1a0000 0%, #0a0a0a 70%);
+      text-align: center;
+      padding: 100px 20px;
+    }
+    .closing-section h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #e63946;
+      margin-bottom: 20px;
+    }
+    .closing-section p {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      line-height: 1.8;
+    }
+    .closing-section .big-heart {
+      font-size: 5rem;
+      display: inline-block;
+      animation: heartbeat 1.2s ease infinite;
+      margin-top: 30px;
+    }
+
+    /* ===== REVEAL ANIMATION ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== KEYFRAMES ===== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.15); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.1); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .message-card { padding: 30px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Hearts Background -->
+  <div class="hearts-container" id="hearts"></div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="cat-emoji">🐱</div>
+    <h1>Hey <span class="cursive">Nilany</span>,</h1>
+    <p class="subtitle cursive">This is for you, my little cat</p>
+    <div class="scroll-hint">
+      Scroll down
+      <span>&#8595;</span>
+    </div>
+  </section>
+
+  <!-- ===== SWEET MESSAGE ===== -->
+  <section class="message-section">
+    <div class="message-card reveal">
+      <h2 class="cursive">From your Booooo</h2>
+      <p>
+        My little cat, I need you to know something...<br /><br />
+        <span class="highlight">I don't like when you're sad.</span>
+        I don't like when the world makes you feel small,
+        when your smile disappears, when your eyes lose their spark.<br /><br />
+        Because your smile? It's my favorite thing in the entire universe.
+        It lights up everything around me. It makes the hardest days feel easy.<br /><br />
+        So here's my promise to you:<br />
+        <span class="highlight">Every single day, I will try my best to make you smile.</span><br />
+        Whether it's a silly joke, a tight hug, a surprise, or just being there —
+        I will always, always fight for your happiness.<br /><br />
+        You are my cat, my person, my everything. <br />
+        And I like you. <span class="highlight">So, so much.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== OUR THINGS GALLERY ===== -->
+  <section class="gallery-section">
+    <h2 class="reveal cursive">Our Little Universe</h2>
+    <div class="gallery-grid">
+
+      <!-- Cat Card -->
+      <div class="gallery-card reveal">
+        <img src="https://cataas.com/cat/cute" alt="Cute cat" loading="lazy" />
+        <div class="card-content">
+          <h3>My Little Cat 🐱</h3>
+          <p>That's you. The cutest, the softest, the most lovable little cat in the world.</p>
+        </div>
+      </div>
+
+      <!-- Kung Fu Panda Card -->
+      <div class="gallery-card reveal">
+        <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=600&h=400&fit=crop" alt="Panda" loading="lazy" />
+        <div class="card-content">
+          <h3>Kung Fu Panda 🐼</h3>
+          <p>"Yesterday is history, tomorrow is a mystery, but today is a gift." — Just like you in my life.</p>
+        </div>
+      </div>
+
+      <!-- Bali Card -->
+      <div class="gallery-card reveal">
+        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&h=400&fit=crop" alt="Bali temple" loading="lazy" />
+        <div class="card-content">
+          <h3>Bali Dreams 🌴</h3>
+          <p>Our paradise. The sunsets, the temples, the magic we shared together there.</p>
+        </div>
+      </div>
+
+      <!-- Bali Beach Card -->
+      <div class="gallery-card reveal">
+        <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&h=400&fit=crop" alt="Bali beach" loading="lazy" />
+        <div class="card-content">
+          <h3>Bali Sunsets 🌅</h3>
+          <p>Remember those golden evenings? I'd relive every single one with you.</p>
+        </div>
+      </div>
+
+      <!-- Mini Golf Card -->
+      <div class="gallery-card reveal">
+        <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&h=400&fit=crop" alt="Mini golf" loading="lazy" />
+        <div class="card-content">
+          <h3>Mini Golf Champion 🏌️</h3>
+          <p>Our little competitions. You always win... or maybe I just let you. 😏</p>
+        </div>
+      </div>
+
+      <!-- Another Cat Card -->
+      <div class="gallery-card reveal">
+        <img src="https://cataas.com/cat/says/meow" alt="Cute cat saying meow" loading="lazy" />
+        <div class="card-content">
+          <h3>Meow 🐾</h3>
+          <p>Because one cat picture is never enough when it comes to you.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== VALENTINE FLOWERS ===== -->
+  <section class="flowers-section">
+    <div class="reveal">
+      <h2 class="cursive">Remember Valentine's Day?</h2>
+      <p class="sub">I got you pink flowers... yes, I know you don't like pink. But you loved them anyway.</p>
+      <img
+        class="flowers-gif"
+        src="assets/pink-flowers.gif"
+        alt="Pink flowers gif"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
+  <!-- ===== CLOSING ===== -->
+  <section class="closing-section">
+    <div class="reveal">
+      <h2 class="cursive">I like you, Nilany.</h2>
+      <p>
+        More than words on a screen could ever say.<br />
+        More than all the cats on the internet.<br />
+        More than all the holes-in-one at mini golf.<br /><br />
+        You're my cat, and I'm your <span style="color:#e63946;font-weight:600;">Booooo</span>.<br />
+        And that's all that matters.
+      </p>
+      <div class="big-heart">❤️</div>
+    </div>
+  </section>
+
+  <script>
+    // ===== Floating Hearts =====
+    (function createHearts() {
+      const container = document.getElementById('hearts');
+      const symbols = ['❤️', '♥', '🤍', '❤'];
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('span');
+        heart.classList.add('heart');
+        heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
+        heart.style.animationDuration = (Math.random() * 8 + 7) + 's';
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(heart);
+      }
+    })();
+
+    // ===== Scroll Reveal =====
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
